@@ -14,12 +14,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        //define username and password for form login authenication
+        //here when giving password that password should be encorded
+        auth.inMemoryAuthentication().withUser("Salitha").password("Salitha").authorities("USER","ADMIN");
+
     }
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        // http.authorizeRequests().anyRequest().permitAll();
         http.authorizeRequests().anyRequest().authenticated();
+        http.formLogin();//form login added for authenication
+
     }
 }
