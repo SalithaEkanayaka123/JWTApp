@@ -4,3 +4,5 @@
 4. When we add localhost URL to postman we get the html of the login page
 5. Added authentication for Basic authentication - commit 6
 6. AppController added and after that postman get method giving the name we are giving
+7. Nowe we have to connect to database. So here initially we have to add a model class - commit 8
+8.
