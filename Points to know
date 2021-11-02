@@ -3,3 +3,4 @@
 3. We have added a login form given by spring security and instead of given password we have added our own username and password and password is encrypted - commit 5
 4. When we add localhost URL to postman we get the html of the login page
 5. Added authentication for Basic authentication - commit 6
+6. AppController added and after that postman get method giving the name we are giving
