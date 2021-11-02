@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
        // http.authorizeRequests().anyRequest().permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.formLogin();//form login added for authenication
+        http.httpBasic();//giving authentication for Basic Authentication
 
     }
 }

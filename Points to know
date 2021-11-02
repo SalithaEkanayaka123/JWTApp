@@ -1,3 +1,5 @@
 1. Since we have added spring security dependency, when we run the application and type localhost:8080/ we navigate to a login page in browser
 2. But by adding the SecurityConfiguration file and run (Code should be implmented as Initial Commit and commit 2) we dont need a login it will go to the whitelist page without login
-3. We have added a login form given by spring security and instead of given password we have added our own username and password and password is encrypted
+3. We have added a login form given by spring security and instead of given password we have added our own username and password and password is encrypted - commit 5
+4. When we add localhost URL to postman we get the html of the login page
+5. Added authentication for Basic authentication - commit 6
