@@ -1,5 +1,8 @@
 package com.example.jwtapp.config;
 
+import com.example.jwtapp.Repository.UserDetailsRepository;
+import com.example.jwtapp.Services.CustomUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private CustomUserService userService;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -21,6 +27,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //here when giving password that password should be encorded
         auth.inMemoryAuthentication().withUser("Salitha").password(passwordEncorder().encode("Salitha")).authorities("USER","ADMIN");
 
+        //Database Authentication
+        auth.userDetailsService(userService).passwordEncoder(passwordEncorder());
     }
 
     @Bean
