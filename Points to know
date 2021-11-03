@@ -6,4 +6,5 @@
 6. AppController added and after that postman get method giving the name we are giving
 7. Nowe we have to connect to database. So here initially we have to add a model class - commit 8
 8. Create a class called Authority - commit 9
-9.
+9. Implement some codes in User name as per commit - commit 10
+10.
