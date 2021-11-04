@@ -36,10 +36,12 @@ public class JwtappApplication {
         User user = new User();
 
         user.setUserName("Salitha");
-        user.setFirst_name("Salitha");
+        user.setFirst_name("Salitha1");
         user.setLast_name("Ekanayaka");
         user.setPassword(passwordEncoder.encode("Salitha"));
         user.setEnabled(true);
+
+        System.out.println(user);
 
         userDetailsRepository.save(user);
 
