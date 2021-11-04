@@ -11,3 +11,6 @@
 11. Database Authentication line added - commit 12
 12. Save user details - commit 13
 13. Add database source from application properties file - commit 14
+14. Authority levels assigned : commit 16
+15. JWT token authenitications adding
+16. JWT helper class implmented : this class helps to give different mehtods that related to JWT - commit 17
