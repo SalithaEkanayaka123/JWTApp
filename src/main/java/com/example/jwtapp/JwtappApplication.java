@@ -40,6 +40,7 @@ public class JwtappApplication {
         user.setLast_name("Ekanayaka");
         user.setPassword(passwordEncoder.encode("Salitha"));
         user.setEnabled(true);
+        user.setAuthorities(authorityList);//assigning authority list
 
         System.out.println(user);
 

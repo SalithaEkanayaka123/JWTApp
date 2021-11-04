@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
        // http.authorizeRequests().anyRequest().permitAll();
         //In h2 console 403 error commit, this is its fixing
-        http.authorizeRequests((request) -> request.antMatchers("/h2-console/**").permitAll().anyRequest().authenticated()).httpBasic();
+        http.authorizeRequests((request) -> request.antMatchers("/h2-console/").permitAll().anyRequest().authenticated()).httpBasic();
         http.formLogin();//form login added for authenication
         //http.httpBasic();//giving authentication for Basic Authentication
 
