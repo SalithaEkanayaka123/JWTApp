@@ -19,14 +19,15 @@ import java.util.Date;
 
 @Component
 public class JWTTokenHelper {
-    @Value("$(jwt.auth.app)")
+    @Value("${jwt.auth.app}")
     private String appName;//which app token has been issued
 
-    @Value("$(jwt.auth.secret_key)")
+    @Value("${jwt.auth.secret_key}")
     private String secreKey;// useful when you are validating the token
 
-    @Value("$(jwt.auth.expires_in)")
+    @Value("${jwt.auth.expires_in}")
     private int expiresIn;//expire time
+
 
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
