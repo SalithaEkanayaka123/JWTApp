@@ -42,7 +42,7 @@ public class JwtappApplication {
         user.setEnabled(true);
         user.setAuthorities(authorityList);//assigning authority list
 
-        System.out.println(user);
+        System.out.println(user.getPassword());
 
         userDetailsRepository.save(user);
 

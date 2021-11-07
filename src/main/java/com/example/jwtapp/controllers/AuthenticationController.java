@@ -31,10 +31,11 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @PostMapping
+    @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         //username and passwrod authentication happens here
+        System.out.println(" " + authenticationRequest.getUsername() + " " + authenticationRequest.getPassword());
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         //securty authentication happens here
@@ -48,4 +49,7 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(loginResponse);
     }
+
+
+
 }
