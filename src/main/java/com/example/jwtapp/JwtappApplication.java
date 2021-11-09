@@ -15,13 +15,6 @@ import java.util.List;
 @SpringBootApplication
 public class JwtappApplication {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserDetailsRepository userDetailsRepository;
-
-
     public static void main(String[] args) {
         SpringApplication.run(JwtappApplication.class, args);
     }
