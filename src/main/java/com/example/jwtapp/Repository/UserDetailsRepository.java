@@ -1,7 +1,6 @@
 package com.example.jwtapp.Repository;
 
-import com.example.jwtapp.entities.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.jwtapp.entities.Users;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
@@ -10,8 +9,8 @@ import java.util.Optional;
 //    User findByUserName (String userName);
 //}
 
-public interface UserDetailsRepository extends MongoRepository<User, String> {
-    Optional<User> findByUsername(String username);
+public interface UserDetailsRepository extends MongoRepository<Users, String> {
+    Optional<Users> findByUsername(String username);
 
     Boolean existsByUsername(String username);
 

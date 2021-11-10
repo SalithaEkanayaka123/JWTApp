@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Document(collection = "users")
-public class User{
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,28 +29,22 @@ public class User{
     @Column(name = "password")
     private String password;
 
-//    @Column(name = "firstName")
-//    private String first_name;
-//
-//    @Column(name = "lastName")
-//    private String last_name;
 
     @Column(name = "email")
     private String email;
 
-//    @Column(name = "phoneNumber")
-//    private String phone_number;
-//
-//    @Column(name = "enabled")
-//    private boolean enabled=true;
+    @Column(name = "role")
+    private String role;
 
-    //checks whether the user is exsists in the database
     @DBRef
     private Set<Role> roles = new HashSet<>();
 
 
-
-    public User() {
+    public Users(String username, String password, String email, String role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 
     public String getId() {
@@ -91,5 +85,13 @@ public class User{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

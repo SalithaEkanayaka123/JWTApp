@@ -9,7 +9,7 @@
 9. Implement some codes in User name as per commit - commit 10
 10. implment service class and repository class by implementing userdetailsservice - commit 11
 11. Database Authentication line added - commit 12
-12. Save user details - commit 13
+12. Save users details - commit 13
 13. Add database source from application properties file - commit 14
 14. Authority levels assigned : commit 16
 15. JWT token authenitications adding

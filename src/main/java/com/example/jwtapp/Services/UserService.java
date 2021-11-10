@@ -1,7 +1,7 @@
 package com.example.jwtapp.Services;
 
-import com.example.jwtapp.entities.User;
+import com.example.jwtapp.entities.Users;
 
 public interface UserService {
-    User getUserByName(String name);
+    Users getUserByName(String name);
 }
