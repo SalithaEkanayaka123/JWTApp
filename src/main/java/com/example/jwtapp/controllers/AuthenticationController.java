@@ -1,31 +1,26 @@
 package com.example.jwtapp.controllers;
-import com.example.jwtapp.Repository.RoleRepository;
 import com.example.jwtapp.Repository.UserDetailsRepository;
 import com.example.jwtapp.Services.CustomUserService;
-import com.example.jwtapp.entities.Role;
+import com.example.jwtapp.Services.UserService;
+import com.example.jwtapp.config.JWTTokenHelper;
 import com.example.jwtapp.entities.Users;
 import com.example.jwtapp.requests.LoginRequest;
 import com.example.jwtapp.response.JWTResponse;
-import com.example.jwtapp.response.MessageResponse;
-import org.springframework.security.authentication.AuthenticationManager;
-import com.example.jwtapp.config.JWTTokenHelper;
+import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("api/v1")
 public class AuthenticationController {
 
     @Autowired
@@ -45,31 +40,46 @@ public class AuthenticationController {
     @Autowired
     CustomUserService customUserService;
 
-    @PostMapping("/signin")
+    @Autowired
+    UserService userService;
+
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) throws Exception {
+        System.out.println("1 "+ loginRequest.getUsername() + " 2 " + loginRequest.getPassword());
 
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
-        }catch (BadCredentialsException e){
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+
+        } catch (BadCredentialsException e){
             throw new Exception ("Password Not Correct", e);
         }
+        final UserDetails userDetails = customUserService.loadUserByUsername(loginRequest.getUsername());
 
-        final UserDetails userDetails = customUserService.loadUserByUsername(loginRequest.getUserName());
         final String jwt = jwtTokenHelper.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(new JWTResponse(jwt));
-
+        System.out.println("username is taken " + jwt);
+        return ResponseEntity.ok(jwt);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody Users users) {
-        if (userRepository.existsByUsername(users.getUsername())) {
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser( @RequestBody Users users) {
+        System.out.println("1 "+ users.getUsername() + " 2 " + users.getPassword() + " 3 " + users.getEmail() + " 4 " + users.getRole());
+        if (userRepository.existsByEmail(users.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body("Error: Username is already taken!");
         }
-        userRepository.save(users);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
+        Users user = new Users(users.getUsername(),
+                encoder.encode(users.getPassword()),
+                users.getEmail(),
+                users.getRole()
+                );
+        userRepository.save(user);
+        return new ResponseEntity<>("all ok", HttpStatus.OK);
     }
 
 

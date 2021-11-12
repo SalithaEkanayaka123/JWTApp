@@ -2,18 +2,18 @@ package com.example.jwtapp.requests;
 
 public class LoginRequest {
 
-    private String UserName;
+    private String username;
     private String password;
 
     public LoginRequest() {
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

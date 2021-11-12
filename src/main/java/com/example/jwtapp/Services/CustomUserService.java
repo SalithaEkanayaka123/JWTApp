@@ -25,10 +25,11 @@ public class CustomUserService implements UserDetailsService {
     UserService userService;
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
         Users users = userService.getUserByName(userName);
+
+
         if(users == null){
             this.username = "";
             this.password = "";
@@ -36,6 +37,7 @@ public class CustomUserService implements UserDetailsService {
             this.username = users.getUsername();
             this.password = users.getPassword();
         }
+
         return new User(username, password, new ArrayList<>());
 
     }

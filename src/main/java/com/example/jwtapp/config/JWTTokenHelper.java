@@ -17,24 +17,70 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JWTTokenHelper {
+
+    //need to check
     @Value("${jwt.auth.app}")
     private String appName;//which app token has been issued
 
     @Value("${jwt.auth.secret_key}")
     private String secreKey;// useful when you are validating the token
 
+    //need to check
     @Value("${jwt.auth.expires_in}")
     private int expiresIn;//expire time
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTTokenHelper.class);
-
-
-
-
+    //need to check
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+
+    public String extractUsername(String token){
+        return extractClaim(token, Claims::getSubject);
+    }
+
+//    public String getUsernameFromToken (String token){
+//        String username;
+//        try{
+//            final Claims claims = this.getAllClaimsFromToken(token);
+//            username = claims.getSubject();
+//        }catch (Exception e){
+//            username = null;
+//        }
+//        return username;
+//    }
+
+    public Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token){
+        return Jwts.parser().setSigningKey(secreKey).parseClaimsJws(token).getBody();
+    }
+
+    private Boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    public String generateToken (String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        return Jwts.builder()
+                .setIssuer(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .signWith(SIGNATURE_ALGORITHM, secreKey)
+                .compact();
+    }
+
+
+
 
     private Claims getAllClaimsFromToken (String token){
         Claims claims;
@@ -50,99 +96,15 @@ public class JWTTokenHelper {
 
     }
 
-    public String getUsernameFromToken (String token){
-        String username;
-        try{
-            final Claims claims = this.getAllClaimsFromToken(token);
-            username = claims.getSubject();
-        }catch (Exception e){
-            username = null;
-        }
-        return username;
-    }
 
-    public String generateToken (String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        return Jwts.builder()
-                .setIssuer(username)
-                .setIssuedAt(new Date())
-                .setExpiration(generateExpirationDate())
-                .signWith(SIGNATURE_ALGORITHM, secreKey)
-                .compact();
+
+    public Boolean validateToken(String token, UserDetails employeeDetails){
+        final String username = extractUsername(token);
+        return (username.equals(employeeDetails.getUsername()) && !isTokenExpired(token));
     }
 
 
 
-    private Date generateExpirationDate() {
-        return new Date(new Date().getTime() * expiresIn * 1000);
-    }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (
-                username != null &&
-                        username.equals(userDetails.getUsername()) &&
-                        !isTokenExpired(token)
-        );
-    }
-
-//    public boolean validateJwtToken(String authToken) {
-//        try {
-//            Jwts.parser().setSigningKey(secreKey).parseClaimsJws(authToken);
-//            return true;
-//        } catch (MalformedJwtException e) {
-//            logger.error("Invalid JWT token: {}", e.getMessage());
-//        } catch (ExpiredJwtException e) {
-//            logger.error("JWT token is expired: {}", e.getMessage());
-//        } catch (UnsupportedJwtException e) {
-//            logger.error("JWT token is unsupported: {}", e.getMessage());
-//        } catch (IllegalArgumentException e) {
-//            logger.error("JWT claims string is empty: {}", e.getMessage());
-//        }
-//
-//        return false;
-//    }
-
-    public boolean isTokenExpired(String token) {
-        Date expireDate=getExpirationDate(token);
-        return expireDate.before(new Date());
-    }
-
-
-    private Date getExpirationDate(String token) {
-        Date expireDate;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            expireDate = claims.getExpiration();
-        } catch (Exception e) {
-            expireDate = null;
-        }
-        return expireDate;
-    }
-
-
-    public Date getIssuedAtDateFromToken(String token) {
-        Date issueAt;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            issueAt = claims.getIssuedAt();
-        } catch (Exception e) {
-            issueAt = null;
-        }
-        return issueAt;
-    }
-
-    public String getToken( HttpServletRequest request ) {
-
-        String authHeader = getAuthHeaderFromHeader( request );
-        if ( authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-
-        return null;
-    }
-
-    public String getAuthHeaderFromHeader( HttpServletRequest request ) {
-        return request.getHeader("Authorization");
-    }
 
 }

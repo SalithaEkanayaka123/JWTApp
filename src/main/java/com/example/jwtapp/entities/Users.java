@@ -1,15 +1,7 @@
 package com.example.jwtapp.entities;
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Document(collection = "users")
 public class Users {
@@ -35,10 +27,6 @@ public class Users {
 
     @Column(name = "role")
     private String role;
-
-    @DBRef
-    private Set<Role> roles = new HashSet<>();
-
 
     public Users(String username, String password, String email, String role) {
         this.username = username;
@@ -77,14 +65,6 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public String getRole() {
